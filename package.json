@@ -1,0 +1,24 @@
+{
+  "name": "capss",
+  "version": "0.0.1",
+  "description": "stylus functions as properties to accelerate coding",
+  "main": "index.styl",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guduf/capss.git"
+  },
+  "keywords": [
+    "css",
+    "stylus",
+    "functions"
+  ],
+  "author": "guduf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guduf/capss/issues"
+  },
+  "homepage": "https://github.com/guduf/capss#readme"
+}

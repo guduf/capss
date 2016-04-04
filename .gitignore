@@ -1,0 +1,7 @@
+node_modules/
+db/
+config/secret.json
+npm-debug.log
+.DS_Store
+*.env
+!.gitignore
