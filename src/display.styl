@@ -1,0 +1,88 @@
+@require 'dimension'
+@require 'alignment'
+_isDisplay(str)
+  if (typeof(str) != 'string')
+    return
+  if str == 'block' || str == 'inline-block'
+    return true
+/**
+ * _DIS (display)
+ *
+ * @private
+ * @require dimension
+ * @require alignment
+ * @param {display} dis
+ * @args[0] {Dimension|Alignment} width - If arg is a Dimension, this set WIDTH to rhythm args[0].
+ * @args[1] {Dimension|Alignment} height - If arg is a Dimension, this set height to rhythm args[1].
+ * @args[last] {Alignement} alignment - If arg is a Alignement, this set ALIGNEMENT to rhythm args[last].
+ * @set {dis} display
+ * @set ALIGNEMENT
+ * @set WIDTH
+ * @set HEIGHT
+ */
+_DIS(dis, args)
+  if _isDisplay(dis) != true
+    return
+  display unquote(dis)
+  if _isAlignment(args[0])
+    if length(split(' ', '' + args[0])) > 1
+      ALI ('' + args[0])
+    else
+      ALI args[0]
+    args[0] = null
+  if _isDimension(args[0])
+    if length(split(' ', '' + args[0])) > 1
+      W ('' + args[0])
+    else
+      W args[0]
+    args[0] = null
+  if _isAlignment(args[1])
+    if length(split(' ', '' + args[1])) > 1
+      ALI ('' + args[1])
+    else
+      ALI args[1]
+    args[1] = null
+  if _isDimension(args[1])
+    if length(split(' ', '' + args[1])) > 1
+      H ('' + args[1])
+    else
+      H args[1]
+    args[0] = null
+  if _isAlignment(args[2])
+    if length(split(' ', '' + args[2])) > 1
+      ALI ('' + args[2])
+    else
+      ALI args[2]
+/**
+ * B (block)
+ *
+ * @parent D
+ */
+B(args...)
+  push(args, null)
+  _DIS('block', args)
+/**
+ * B-REL (block relative)
+ *
+ * @extend B
+ * @set {'relative'} position
+ */
+B-REL(args...)
+  position relative
+  _DIS('block', args)
+/**
+ * I (inline-block)
+ *
+ * @constructor display
+ */
+I(args...)
+  _DIS('inline-block', args)
+/**
+ * I-REL (inline-block relative)
+ *
+ * @extend I
+ * @set {'relative'} position
+ */
+I-REL(args...)
+  position relative
+  _DIS('inline-block', args)

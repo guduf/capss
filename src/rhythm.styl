@@ -1,0 +1,37 @@
+/**
+ * R (rhythm)
+ *
+ * @config {unit: 20px} $RHYTHM
+ * @arg1 {number|string|unit: 1} val - If arg is a number, this returns a multiple of $RHYTHM. If arg is a string, this provides some shorthands. If arg is a unit, this returns arg.
+ * @arg2 {string: null} fraction - If arg is a number and fraction is filled, this returns a multiple of divide of $RHYTHM.
+ * @return {unit} - Return a unit based on $RHYTHM if val is a integer.
+ */
+$RHYTHM := 24px
+R(val = 1, fraction = null)
+  if val == null || val == 'null' || val == ''
+    return null
+  if val == 0
+    return 0
+  if typeof(val) == 'string'
+    if substr('' + val, 0, 1) == '/'
+      val = 1 / convert(substr(val, 1))
+    else if val == '%'
+      return percentage(1)
+    else if substr('' + val, 0, 1) == '%'
+      return round((convert(substr(val, 1)) * 10000)/ 12) / 100 + '%'
+    else if val == '?'
+      return convert(auto)
+    else if match('^(?:[01234567789]{1,})?\.?(?:[01234567789]{1,})?(?:[01234567789][abcdefjhijklmnopqrstuvwxyz%]{1,4})?$', val) != null
+      val = convert(val)
+    else
+     return null
+  if typeof(fraction) == 'string' && substr(fraction, 0, 1) == '/'
+    val = 1 / convert(substr(fraction, 1)) * val
+  if unit(val) != ''
+    return val
+  if unit($RHYTHM) == 'px'
+    return floor(val * $RHYTHM)
+  else if unit($RHYTHM) == 'vw' or unit($RHYTHM) == 'vh'
+    return round(val * $RHYTHM * 100) / 100
+  else
+    return val * $RHYTHM

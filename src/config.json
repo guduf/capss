@@ -1,0 +1,5 @@
+{
+  "DIRECTION": ["top", "right", "bottom", "left"],
+  "POSITION": ["absolute", "fixed", "relative", "static"],
+  "BOX": ["margin", "border", "padding", "content"]
+}

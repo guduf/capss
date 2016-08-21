@@ -1,0 +1,146 @@
+@require 'rhythm'
+config = json('config.json', { hash: true })
+DIRECTION = ()
+for key, direction in config.DIRECTION
+  push(DIRECTION, direction)
+BOX = ()
+for key, direction in config.BOX
+  push(BOX, direction)
+_isChildSel(str)
+  if typeof(str) != 'string'
+   return false
+  else if str == ':F' || str == ':F!' || str == ':L' || str == ':L!'
+    return true
+  return false
+_setChild(ChildSel, property, val)
+  if ChildSel == ':F'
+    &:first-child
+      {property} convert('' + val)
+  else if ChildSel == ':F!'
+    {property} convert('' + val)
+    &:first-child
+      {property} convert('' + val)
+  else if ChildSel == ':L'
+    &:last-child
+      {property} convert('' + val)
+  else if ChildSel == ':L!'
+    {property} convert('' + val)
+    &:last-child
+      {property} convert('' + val)
+_isBoxDimension(BoxDimension)
+  if length(split(' ', '' + BoxDimension)) == 2
+    BoxDimension = split(' ', '' + BoxDimension)
+    if R(BoxDimension[0]) != null && _isChildSel(BoxDimension[1])
+      return true
+    else
+      return false
+  else if R(BoxDimension) != null
+    return true
+  else
+    return false
+/**
+ * _BOX-DIR-DIM (box direction dimension)
+ * @private
+ * @require rhythm
+ * @arg1 {BOX} box
+ * @arg2 {Direction}? direction
+ * @arg3 {BoxDimension} - This sets {box}-{direction} rhythm BoxDimension
+ * @arg4 {ChildSel} - This sets {box}-{direction} rhythm BoxDimension
+ * @set {box}-{direction}
+ */
+_BOX-DIR-DIM(box, direction = null, BoxDimension = null, ChildSel = null)
+  if index(BOX, box) == null || box == 'content'
+    warn('CAPSS invalid box: ' + box)
+    return
+  else if index(DIRECTION, direction) == null
+    warn('CAPSS invalid direction: ' + direction)
+  else
+    if _isBoxDimension(BoxDimension) && length(split(' ', '' + BoxDimension)) > 1
+      ChildSel = split(' ', '' + BoxDimension)[1]
+      BoxDimension = split(' ', '' + BoxDimension)[0]
+    if R(BoxDimension) == null
+      warn('CAPSS invalid rhythm: ' + BoxDimension)
+    else if ChildSel == null
+      {box}-{direction} R(BoxDimension)
+    else
+      _setChild(ChildSel, box + '-' + direction, R(BoxDimension))
+/**
+ * {BOX} (box)
+ *
+ * @private
+ * @require rhythm
+ * @arg1 {Box} box
+ * @args[0] {Rhythm|ChildSel}
+ * @args[1] {Rhythm|ChildSel}?
+ * @args[2] {Rhythm|ChildSel}?
+ * @args[3] {Rhythm|ChildSel}?
+ * @args[4] {ChildSel}?
+ * @set margin
+ */
+_BOX(box, args)
+  ChildSel = null
+  if _isChildSel(last(args)) == true
+    ChildSel = last(args)
+  else
+    list = null
+    if R(args[0]) != null && R(args[1]) != null && R(args[2]) != null && R(args[3]) != null
+      list =  '' + (R(args[0]) R(args[1]) R(args[2]) R(args[3]))
+    else if R(args[0]) != null && R(args[1]) != null && R(args[2]) != null
+      list =  '' + (R(args[0]) R(args[1]) R(args[2]))
+    else if R(args[0]) != null && R(args[1]) != null
+      list =  '' + (R(args[0]) R(args[1]))
+    else if R(args[0]) != null
+      list =  '' + (R(args[0]))
+    if list == null
+      warm('CAPPS list is null')
+    else if box == 'border'
+      dirs = split(' ', list)
+      if length(dirs) = 1
+        border unquote(dirs[0])
+      else if length(dirs) = 2
+        border-top dirs[0] solid transparent
+        border-right dirs[1] solid transparent
+        border-bottom dirs[0] solid transparent
+        border-left dirs[1] solid transparent
+      else if length(dirs) = 3
+        border-top dirs[0] solid transparent
+        border-right dirs[1] solid transparent
+        border-bottom dirs[2] solid transparent
+        border-left dirs[1] solid transparent
+      else if length(dirs) = 4
+        border-top dirs[0] solid transparent
+        border-right dirs[1] solid transparent
+        border-bottom dirs[2] solid transparent
+        border-left dirs[3] solid transparent
+    else
+      if ChildSel == null
+        {box} unquote(list)
+      else
+        _setChild(ChildSel, box, list)
+/**
+ * MAR (margin)
+ *
+ * @parent _BOX
+ */
+MAR(args...)
+  _BOX 'margin' args
+/**
+ * PAD (padding)
+ *
+ * @parent _BOX
+ */
+PAD(args...)
+  _BOX 'padding' args
+/**
+ * PAD (border)
+ *
+ * @parent _BOX
+ */
+BOR(args...)
+  _BOX 'border' args
+/**
+ * {BOX-DIR} ({box} {direction})
+ *
+ * @parent _BOX-DIR
+ */
+@import "_box"

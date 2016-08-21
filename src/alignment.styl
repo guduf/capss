@@ -1,0 +1,48 @@
+_isAlignment(ali)
+  if length(split(' ', '' + ali)) > 1
+    match = 0;
+    for _ali in split(' ', '' + ali)
+      if _isAlignment(_ali)
+        match += 1;
+    return match > 0
+  if (typeof(ali) != 'string')
+    return
+  if ali == 'S' || ali == 'M' || ali == 'E' || ali == 'A' || ali == 'J'
+    return true
+/**
+ * ALI (alignment)
+ *
+ * @args[0] {alignment} horizontal - This set text-align to arg0
+ * @args[1] {alignment} vertical - This set vertical-align to args[0]
+ * @set text-align
+ * @set vertical-align
+ */
+ALI(args...)
+  if _isAlignment(args[0]) && length(split(' ', '' + args[0])) > 1
+    args = split(' ', '' + args[0])
+  if _isAlignment(args[0])
+    if args[0] == 'S'
+      text-align left
+    else if args[0] == 'M'
+      text-align center
+    else if args[0] == 'E'
+      text-align right
+    else if args[0] == 'J'
+      text-align justify
+  if _isAlignment(args[1])
+    if args[1] == 'S'
+      vertical-align top
+    else if args[1] == 'M'
+      vertical-align middle
+    else if args[1] == 'E'
+      vertical-align bottom
+/**
+ * ALI-V (alignment vertical)
+ *
+ * @args[0] {alignment} - This set vertical-align to arg0
+ * @args[1] {alignment} - This set text-align to args[0]
+ * @set text-align
+ * @set vertical-align
+ */
+ALI-V(arg1, arg2 = null)
+  ALI arg2 arg1

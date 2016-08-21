@@ -1,0 +1,86 @@
+@require 'rhythm'
+config = json('config.json', { hash: true })
+POSITION = ()
+for key, position in config.POSITION
+  push(POSITION, position)
+_isStack(str)
+  if typeof(str) != 'string'
+    return
+  if substr(str, 0, 1) == '+' || substr(str, 0, 1) == '-'
+    return true
+/**
+ * Z (stack)
+ *
+ * @config {number: 100} $STACKING_BASE - The z-index value for position 1
+ * @config {number: 1} $STACKING_STEP - The gap between each position
+ * @arg1 {Stack} val - If arg is a string, this set z-index to calculated position for arg1. If this arg1 is a number, this set z-index to arg1.
+ * @arg2 {number: $STACKING_BASE} base - The z-index value for position 0
+ * @arg3 {number: $STACKING_STEP} step - The gap between each position
+ * @set z-index
+ */
+$STACKING_BASE := 100
+$STACKING_STEP := 1
+Z(arg1, base = $STACKING_BASE, step = $STACKING_STEP)
+  if _isStack(arg1)
+    if arg1 == '+'
+      z-index base
+    else if arg1 == '-'
+      z-index base - step
+    else if substr(arg1, 0, 1) == '+'
+      z-index base + (convert(substr(arg1, 1)) - 1) * step
+    else if substr(arg1, 0, 1) == '-'
+      z-index base - convert(substr(arg1, 1)) * step
+  else if unit(arg1) == ''
+    z-index arg1
+/**
+ * _POS (position)
+ *
+ * @private
+ * @require rhythm
+ * @require stack
+ * @args[0] {Rhythm} - Set [ordering[0]] offset.
+ * @args[1] {Rhythm} - Set [ordering[1]] offset.
+ * @args[2] {Rhythm} - Set [ordering[2]] offset.
+ * @args[2] {Rhythm} - Set [ordering[3]] offset.
+ * @args[last] {Stack} - Set z-index.
+ * @set top
+ * @set right
+ * @set bototm
+ * @set left
+ */
+_POS(pos, ordering, args)
+  // warm('_POS' + pos + ' - ' + ordering + ' -- ' + join(' | ', args))
+  if index(POSITION, pos) == null
+    warn('CAPPS Invalid position: ' + pos)
+  else
+    position unquote(pos)
+  if typeof(args[0]) == 'string'
+    if args[0] == '%%'
+      top 0
+      right 0
+      bottom 0
+      left 0
+      args[0] = null
+  if _isStack(args[0])
+    Z args[0]
+    args[0] = null
+  if args[0] == 0 || args[0]
+    {ordering[0]} R(args[0])
+  if _isStack(args[1])
+    Z args[1]
+    args[1] = null
+  if args[1] == 0 || args[1]
+    {ordering[1]} R(args[1])
+  if _isStack(args[2])
+    Z args[2]
+    args[2] = null
+  if args[2] == 0 || args[2]
+    {ordering[2]} R(args[2])
+  if _isStack(args[3])
+    Z args[3]
+    args[3] = null
+  if args[3] == 0 || args[3]
+    {ordering[3]} R(args[3])
+  if _isStack(args[4])
+    Z args[4]
+@import "_position"

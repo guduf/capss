@@ -1,0 +1,52 @@
+@require 'rhythm'
+_isDimension(Dimension)
+  if length(split(' ', '' + Dimension)) > 1
+    match = 0;
+    for _Dimension in split(' ', '' + Dimension)
+      if _isDimension(_Dimension)
+        match += 1;
+    return match > 0
+  if R(Dimension) != null
+    return true
+/**
+ * _DIM (dimension)
+ *
+ * @private
+ * @require rhythm
+ * @param {dimension} dim
+ * @args[0] {Rhythm|Dimension: null} val - Set [dimension] to rhythm args[0].
+ * @args[1] {Rhythm: null} max - Set max-[dimension] to rhythm args[1].
+ * @args[2] {Rhythm: null} min - Set min-[dimension] to rhythm args[2].
+ * @set [dimension]
+ * @set max-[dimension]
+ * @set min-[dimension]
+ */
+_DIM(dim, args)
+  if typeof(dim) != 'string' || (dim != 'width' && dim != 'height')
+    return
+  if _isDimension(args[0]) && length(split(' ', '' + args[0])) > 1
+    args = split(' ', '' + args[0])
+  if _isDimension(args[0])
+    {dim} R(args[0])
+  if _isDimension(args[1])
+    max-{dim} R(args[1])
+  if _isDimension(args[2])
+    min-{dim} R(args[2])
+/**
+ * W (width)
+ *
+ * @constructor dimension
+*/
+W(args...)
+  if _isDimension(args[0]) && length(split(' ', '' + args[0])) > 1
+    args = split(' ', '' + args[0])
+  _DIM('width', args)
+/**
+ * H (height)
+ *
+ * @constructor dimension
+ */
+H(args...)
+  if _isDimension(args[0]) && length(split(' ', '' + args[0])) > 1
+    args = split(' ', '' + args[0])
+  _DIM('height', args)
