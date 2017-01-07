@@ -1,10 +1,12 @@
 {
   "name": "capss",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0",
   "description": "stylus functions as properties to accelerate coding",
   "main": "index.styl",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "npm run lint && node src/box.js && node src/position.js",
+    "lint": "./node_modules/.bin/eslint src/*.js test",
+    "test": "npm run compile && ./node_modules/.bin/mocha test"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,10 @@
     "stylus": "^0.54.2"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.13.0",
+    "eslint-config-google": "^0.7.1",
+    "mocha": "^3.2.0",
     "stylus": "^0.54.5"
   }
 }

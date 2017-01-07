@@ -1,57 +1,91 @@
-var stylus = require('stylus');
-var assert = require('chai').assert;
-var srcPath = require('path').join(__dirname, '../src');
+'use strict';
+const renderTest = require('./render-test');
+
 describe('alignment.styl', function() {
   describe('ALI (alignment)', function() {
     it('should return nothing when no args is alignment', function() {
-      stylus('@import "alignment"\na\n  ALI 12 \'\' \'foo\' null \'%\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, '');
-        });
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI 12 '' 'foo' null '%'
+        `,
+        ''
+      );
     });
     it('should set text-align when only one arg is alignment', function() {
-      stylus('@import "alignment"\na\n  ALI \'M\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, 'a {\n  text-align: center;\n}\n');
-        });
-    });
-    it('should use arg when arg is a list', function() {
-      stylus('@import "alignment"\na\n  ALI (\'\' \'S\') \'\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, 'a {\n  vertical-align: top;\n}\n');
-        });
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI 'M'
+        `,
+        `
+          a {
+            text-align: center;
+          }
+        `
+      );
     });
     it('should set text-align and vertical-align when all args are alignments', function() {
-      stylus('@import "alignment"\na\n  ALI \'M\' \'S\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, 'a {\n  text-align: center;\n  vertical-align: top;\n}\n');
-        });
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI 'M' 'S'
+        `,
+        `
+          a {
+            text-align: center;
+            vertical-align: top;
+          }
+        `
+      );
     });
     it('should set vertical-align when only args[1] is alignment', function() {
-      stylus('@import "alignment"\na\n  ALI \'\' \'M\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, 'a {\n  vertical-align: middle;\n}\n');
-        });
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI '' 'M'
+        `,
+        `
+          a {
+            vertical-align: middle;
+          }
+        `
+      );
+    });
+    it('should use arg when arg is a list', function() {
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI ('' 'S') ''
+        `,
+        `
+          a {
+            vertical-align: top;
+          }
+        `
+      );
     });
   });
   describe('ALI-V (alignment vertical)', function() {
     it('should set text-align and vertical-align when all args are alignments', function() {
-      stylus('@import "alignment"\na\n  ALI-V \'M\' \'S\'\n')
-        .set('filename', srcPath + '/test.styl')
-        .render(function(err, css) {
-          if (err) throw new Error(err.message);
-          assert.equal(css, 'a {\n  text-align: left;\n  vertical-align: middle;\n}\n');
-        });
+      renderTest(
+        `
+          @import 'alignment'
+          a
+            ALI-V 'M' 'S'
+        `,
+        `
+          a {
+            text-align: left;
+            vertical-align: middle;
+          }
+        `
+      );
     });
   });
 });

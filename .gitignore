@@ -1,7 +1,7 @@
 node_modules/
-db/
-config/secret.json
+**/secret.*
 npm-debug.log
 .DS_Store
 *.env
+*.pem
 !.gitignore
